@@ -1,7 +1,7 @@
-## [easy-salary](https://github.com/theajack/salary) （工资计算器）
+## [easy-salary](https://github.com/ETOgaosion/salary) （工资计算器）
 
 
-**[在线使用](https://theajack.github.io/salary)**
+**[在线使用](https://etogaosion.github.io/salary)**
 
 扫描或wx搜索`收入详情计算器`使用小程序
 
@@ -55,7 +55,7 @@ interface IHousingFundRange {
 }
 ```
 
-详细配置与返回结果请参考 [声明文件](https://github.com/theajack/salary/blob/master/src/calculator/index.d.ts) 或 [在线使用](https://theajack.github.io/salary)
+详细配置与返回结果请参考 [声明文件](https://github.com/ETOgaosion/salary/blob/master/src/calculator/index.d.ts) 或 [在线使用](https://etogaosion.github.io/salary)
 
 **cdn 引入**
 
@@ -71,7 +71,7 @@ const result = (new window.Salary({
 
 #### 2. 在线使用
 
-[点击前往](https://theajack.github.io/salary)
+[点击前往](https://etogaosion.github.io/salary)
 
 ### 1. 工资算法
 
