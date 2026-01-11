@@ -16,6 +16,10 @@ export interface IStockOption {
     buybackMonth: number; // 回购月份 (1-12)
 }
 
+export interface IStock {
+    value: number; // 每年股票总价值
+}
+
 export interface IInsuranceAndFund {
     pension: number;
     medicalInsurance: number;
@@ -47,6 +51,7 @@ export interface ICalculateData<T = IInsuranceAndFund> {
     signingBonus: number[];
     housingFundRange: IHousingFundRange;
     stockOption: IStockOption; // 期权配置
+    stock: IStock; // 股票配置
 }
 
 export type ICalculateOptions = Partial<ICalculateData<IInsuranceAndFundOptions>>;
@@ -75,6 +80,9 @@ export interface ICalculateResult {
     stockOptionPreTax: number; // 期权税前金额
     stockOptionTax: number; // 期权税额
     stockOptionAfterTax: number; // 期权税后金额
+    stockPreTax: number; // 股票税前金额
+    stockTax: number; // 股票税额
+    stockAfterTax: number; // 股票税后金额
 }
 
 export class Salary implements ICalculateData {
@@ -89,6 +97,7 @@ export class Salary implements ICalculateData {
     signingBonus: number[]; // 每月额外奖金
     housingFundRange: IHousingFundRange; // 公积金计算上下限
     stockOption: IStockOption; // 期权配置
+    stock: IStock; // 股票配置
 
     salaryResult: ICalculateResult;
 

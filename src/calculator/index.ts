@@ -5,7 +5,7 @@
  */
 
 import {calculateSalary} from './calculator';
-import {ICalculateData, ICalculateResult, IHousingFundRange, IInsuranceAndFund, IStockOption} from './index.d';
+import {ICalculateData, ICalculateResult, IHousingFundRange, IInsuranceAndFund, IStockOption, IStock} from './index.d';
 
 export default class Salary implements ICalculateData {
     salary: number = 10000; // 基础工资
@@ -39,6 +39,9 @@ export default class Salary implements ICalculateData {
         separateTax: false, // 期权单独计税
         vesting: [], // 期权月归属比例
         buybackMonth: 12, // 回购月份
+    };
+    stock: IStock = {
+        value: 0, // 每年股票总价值
     };
 
     salaryResult: ICalculateResult;

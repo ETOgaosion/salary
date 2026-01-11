@@ -38,6 +38,11 @@ export const TEXT_MAP: TTransformMap<ICalculateData> = {
         vesting: {nec: true, base: true, text: '期权月归属比例', unit: '%', info: '12个月归属比例，用空格分隔，总和不超过100'},
         buybackMonth: {nec: true, base: true, text: '期权回购月份', unit: '月', info: '期权回购月份(1-12)'},
     },
+    stock: {
+        text: '股票',
+        nec: true,
+        value: {nec: true, base: true, text: '每年股票价值', unit: '元', info: '年度股票总价值'},
+    },
     insuranceAndFundRate: {
         text: '五险一金个人缴纳部分',
         nec: true,
@@ -84,6 +89,9 @@ export const RESULT_TEXT_MAP: TTransformMap<ICalculateResult> = {
     stockOptionPreTax: {base: true, text: '期权税前金额', info: '期权回购时的税前金额'},
     stockOptionTax: {base: true, text: '期权税额', info: '期权个人所得税金额'},
     stockOptionAfterTax: {base: true, text: '期权税后金额', info: '期权回购后的税后金额'},
+    stockPreTax: {base: true, text: '股票税前金额', info: '股票收入的税前金额'},
+    stockTax: {base: true, text: '股票税额', info: '股票个人所得税金额'},
+    stockAfterTax: {base: true, text: '股票税后金额', info: '股票收入的税后金额'},
     insuranceAndFund: {
         text: '五险一金个人缴纳部分',
         pension: {base: true, text: '养老保险个人缴纳金额', info: ''},

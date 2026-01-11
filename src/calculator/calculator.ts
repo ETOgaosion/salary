@@ -53,6 +53,52 @@ function fillStockOptionVesting (vesting: number | number[]): number[] {
     return vesting;
 }
 
+// 股票税计算 (使用个人所得税税率表一 - 综合所得适用)
+// 应纳税额 = 股票应纳税所得额 × 适用税率 - 速算扣除数
+function calculateStockTax (stock: ICalculateData['stock']): {
+    stockPreTax: number;
+    stockTax: number;
+    stockAfterTax: number;
+} {
+    const { value } = stock;
+
+    if (value <= 0) {
+        return { stockPreTax: 0, stockTax: 0, stockAfterTax: 0 };
+    }
+
+    const stockPreTax = value;
+
+    // 个人所得税税率表一（综合所得适用）- 全年应纳税所得额
+    const levels = [
+        {value: 36000, rate: 0.03, deduction: 0},
+        {value: 144000, rate: 0.1, deduction: 2520},
+        {value: 300000, rate: 0.2, deduction: 16920},
+        {value: 420000, rate: 0.25, deduction: 31920},
+        {value: 660000, rate: 0.3, deduction: 52920},
+        {value: 960000, rate: 0.35, deduction: 85920},
+        {value: 0, rate: 0.45, deduction: 181920},
+    ];
+
+    let rate = 0;
+    let deduction = 0;
+    for (const level of levels) {
+        if (level.value === 0 || stockPreTax <= level.value) {
+            rate = level.rate;
+            deduction = level.deduction;
+            break;
+        }
+    }
+
+    // 应纳税额 = 股票应纳税所得额 × 适用税率 - 速算扣除数
+    const stockTax = stockPreTax * rate - deduction;
+
+    return {
+        stockPreTax,
+        stockTax: Math.max(0, stockTax),
+        stockAfterTax: stockPreTax - Math.max(0, stockTax),
+    };
+}
+
 function calculateStockOptionTax (stockOption: ICalculateData['stockOption']): {
     stockOptionPreTax: number;
     stockOptionTax: number;
@@ -109,12 +155,16 @@ export function calculateSalary ({
     signingBonus, // 每月额外奖金
     housingFundRange, // 公积金计算上下限
     stockOption, // 期权配置
+    stock, // 股票配置
 }: ICalculateData): ICalculateResult {
 
     signingBonus = fillExtraBonus(signingBonus);
 
     // 计算期权
     const stockOptionResult = calculateStockOptionTax(stockOption);
+
+    // 计算股票
+    const stockResult = calculateStockTax(stock);
 
     // If not separate tax, add stock option income to the buyback month's signing bonus
     if (!stockOption.separateTax && stockOptionResult.stockOptionIncome > 0) {
@@ -176,8 +226,8 @@ export function calculateSalary ({
         salaryTax, // 每月个人所得税
         salaryTotalTax,
         totalSalaryAfterTaxExcludeAwards, // 除去年终奖总收入
-        totalSalaryPreTax: awardsPreTax + salary * 12 + sumArray(signingBonus) + (stockOption.separateTax ? stockOptionResult.stockOptionPreTax : 0), // 税前年总收入
-        totalSalaryAfterTax: totalSalaryAfterTax + (stockOption.separateTax ? stockOptionResult.stockOptionAfterTax : 0), // 税后年总收入
+        totalSalaryPreTax: awardsPreTax + salary * 12 + sumArray(signingBonus) + (stockOption.separateTax ? stockOptionResult.stockOptionPreTax : 0) + stockResult.stockPreTax, // 税前年总收入
+        totalSalaryAfterTax: totalSalaryAfterTax + (stockOption.separateTax ? stockOptionResult.stockOptionAfterTax : 0) + stockResult.stockAfterTax, // 税后年总收入
         insuranceAndFund, // 五险一金
         insuranceAndFundOfCompany,
         awardsPreTax, // 税前年终奖
@@ -186,6 +236,9 @@ export function calculateSalary ({
         stockOptionPreTax: stockOptionResult.stockOptionPreTax, // 期权税前金额
         stockOptionTax: stockOptionResult.stockOptionTax, // 期权税额
         stockOptionAfterTax: stockOptionResult.stockOptionAfterTax, // 期权税后金额
+        stockPreTax: stockResult.stockPreTax, // 股票税前金额
+        stockTax: stockResult.stockTax, // 股票税额
+        stockAfterTax: stockResult.stockAfterTax, // 股票税后金额
     };
 }
 
