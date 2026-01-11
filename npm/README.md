@@ -1,6 +1,11 @@
-## [easy-salary](https://github.com/theajack/salary) （工资计算器）
+## [easy-salary](https://github.com/ETOgaosion/salary) （工资计算器）
 
-**[在线使用](https://theajack.github.io/salary)**
+
+**[在线使用](https://etogaosion.github.io/salary)**
+
+扫描或wx搜索`收入详情计算器`使用小程序
+
+<img src='https://shiyix.cn/images/salary-mp.jpg' width='200px'/>
 
 适用于2022年新个税计算法的工资计算器，包含基础月薪、年终奖、五险一金、个人所得税计算
 
@@ -21,7 +26,36 @@ const result = (new Salary({
 })).calculate();
 ```
 
-详细配置与返回结果请参考 [声明文件](https://github.com/theajack/salary/blob/master/src/calculator/index.d.ts) 或 [在线使用](https://theajack.github.io/salary)
+```ts
+// 传入的配置参数
+interface Config {
+    salary?: number; // 基础工资
+    specialAdditionalDeduction?: number; // 每月专项附加扣除 租房扣除
+    yearEndAwardsNumber?: number; // 年终奖月数
+    yearEndAwards?: number; // 年终奖 0表示默认使用 年终奖月数
+    insuranceAndFundBase?: number; // 五险一金计算基础，为上一年度平均薪资，默认为salary
+    startingSalary?: number; // 个税起征点
+    insuranceAndFundRate?: IInsuranceAndFund; // 五险一金个人部分
+    insuranceAndFundRateOfCompany?: IInsuranceAndFund; // 五险一金公司部分
+    signingBonus?: number | number[]; // 每月额外奖金
+    housingFundRange?: IHousingFundRange; // 公积金计算上下限
+}
+interface IInsuranceAndFund {
+    pension?: number; // 养老保险
+    medicalInsurance?: number; // 医疗保险
+    unemploymentInsurance?: number; // 失业保险
+    injuryInsurance?: number; // 工伤保险
+    maternityInsurance?: number; // 生育保险
+    housingFund?: number; // 住房公积金
+    supplementaryFund?: number; // 补充住房公积金
+}
+interface IHousingFundRange {
+    min: number;
+    max: number;
+}
+```
+
+详细配置与返回结果请参考 [声明文件](https://github.com/ETOgaosion/salary/blob/master/src/calculator/index.d.ts) 或 [在线使用](https://etogaosion.github.io/salary)
 
 **cdn 引入**
 
@@ -35,11 +69,9 @@ const result = (new window.Salary({
 </script>
 ```
 
-
-
 #### 2. 在线使用
 
-[点击前往](https://theajack.github.io/salary)
+[点击前往](https://etogaosion.github.io/salary)
 
 ### 1. 工资算法
 

@@ -32,7 +32,7 @@ export default class Salary implements ICalculateData {
         housingFund: -1, // 住房公积金 -1 表示与个人缴纳的相等
         supplementaryFund: -1, // 补充公积金 -1 表示与个人缴纳的相等
     };
-    extraBonus: number[] = []; // 每月额外奖金
+    signingBonus: number[] = []; // 每月额外奖金
     housingFundRange: IHousingFundRange = {min: 2590, max: 34188}; // 公积金计算上下限
 
     salaryResult: ICalculateResult;

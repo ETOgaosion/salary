@@ -29,6 +29,7 @@ export const TEXT_MAP: TTransformMap<ICalculateData> = {
     yearEndAwardsNumber: {nec: true, base: true, text: '年终奖月数', unit: '个月', info: '年终奖发几个月的'},
     yearEndAwards: {base: true, text: '年终奖总额', unit: '元', info: '年终奖总金额，如果填写该项，计算优先级会高于年终奖月数，当为0时则使用yearEndAwardsNumber计算'},
     specialAdditionalDeduction: {base: true, text: '每月专项附加扣除', unit: '元', info: '详情请见个税APP或工资单流水中'},
+    signingBonus: {base: true, nec: true, text: '签字费(可按月)', unit: '元', info: '每个月额外奖金，如果需要分12个月单独填写，请使用空格分开'},
     insuranceAndFundRate: {
         text: '五险一金个人缴纳部分',
         nec: true,
@@ -52,7 +53,6 @@ export const TEXT_MAP: TTransformMap<ICalculateData> = {
         housingFund: {base: true, text: '住房公积金公司缴纳百分比', info: '当填-1时表示与个人缴纳部分一致'},
         supplementaryFund: {base: true, text: '补充住房公积金公司缴纳百分比', info: '当填-1时表示与个人缴纳部分一致'},
     },
-    extraBonus: {base: true, text: '每月额外津贴奖金', unit: '元', info: '每个月额外奖金，如果需要分12个月单独填写，请使用空格分开'},
     housingFundRange: {
         text: '公积金上下限',
         min: {base: true, text: '下限', unit: '元', info: '公积金计算的月薪下限', url: 'http://news.sohu.com/a/564484736_121117448'},

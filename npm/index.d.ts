@@ -37,7 +37,7 @@ export interface ICalculateData<T = IInsuranceAndFund> {
     startingSalary: number;
     insuranceAndFundRate: T;
     insuranceAndFundRateOfCompany: T ;
-    extraBonus: number[] | number;
+    signingBonus: number[] | number;
     housingFundRange: IHousingFundRange;
 }
 
@@ -75,7 +75,7 @@ export default class Salary implements ICalculateData {
     startingSalary: number; // 个税起征点
     insuranceAndFundRate: IInsuranceAndFund;
     insuranceAndFundRateOfCompany: IInsuranceAndFund;
-    extraBonus: number[]; // 每月额外奖金
+    signingBonus: number | number[]; // 每月额外奖金
     housingFundRange: IHousingFundRange; // 公积金计算上下限
 
     salaryResult: ICalculateResult;

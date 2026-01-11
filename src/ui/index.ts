@@ -33,29 +33,29 @@ export class UI {
 
     private _initInputUI () {
 
-        const more = this._ce('div', 'input-more');
-        const span = this._ce('span', '');
-        const i = this._ce('i', 'ei-tasks');
-        more.appendChild(i);
-        more.appendChild(span);
-        span.innerText = '展开更多信息';
-
-        more.onclick = () => {
-            if (span.innerText.includes('展开')) {
-                span.innerText = '收起更多信息';
-                this.necEls.forEach(el => el.classList.add('show'));
-            } else {
-                span.innerText = '展开更多信息';
-                this.necEls.forEach(el => el.classList.remove('show'));
-            }
-        };
-        this.inputArea.appendChild(more);
-
         const fragment = this._createFragmentCommon({
             map: TEXT_MAP,
             isInput: true,
         });
         this.inputArea.appendChild(fragment);
+
+        const more = this._ce('div', 'input-more');
+        const span = this._ce('span', '');
+        const i = this._ce('i', 'ei-tasks');
+        more.appendChild(i);
+        more.appendChild(span);
+        span.innerText = '五险一金详细信息';
+
+        more.onclick = () => {
+            if (span.innerText === '五险一金详细信息') {
+                span.innerText = '收起五险一金详细信息';
+                this.necEls.forEach(el => el.classList.add('show'));
+            } else {
+                span.innerText = '五险一金详细信息';
+                this.necEls.forEach(el => el.classList.remove('show'));
+            }
+        };
+        this.inputArea.appendChild(more);
     }
 
     private _initResultUI () {
@@ -106,14 +106,14 @@ export class UI {
     
             const value = salary[key];
             input.value = subKey ? value[subKey] : value;
-            if (key !== 'extraBonus')
+            if (key !== 'signingBonus')
                 input.type = 'number';
     
             input.onchange = () => {
                 const value = input.value;
 
                 let inputValue: number | number[];
-                if (key !== 'extraBonus') {
+                if (key !== 'signingBonus') {
                     inputValue = parseFloat(value);
                 } else {
                     if (value.indexOf(' ') !== -1) {

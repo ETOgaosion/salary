@@ -37,7 +37,7 @@ interface Config {
     startingSalary?: number; // 个税起征点
     insuranceAndFundRate?: IInsuranceAndFund; // 五险一金个人部分
     insuranceAndFundRateOfCompany?: IInsuranceAndFund; // 五险一金公司部分
-    extraBonus?: number | number[]; // 每月额外奖金
+    signingBonus?: number | number[]; // 每月额外奖金
     housingFundRange?: IHousingFundRange; // 公积金计算上下限
 }
 interface IInsuranceAndFund {
