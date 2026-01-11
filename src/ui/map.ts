@@ -30,6 +30,14 @@ export const TEXT_MAP: TTransformMap<ICalculateData> = {
     yearEndAwards: {nec: true, base: true, text: '年终奖总额', unit: '元', info: '年终奖总金额，如果填写该项，计算优先级会高于年终奖月数，当为0时则使用yearEndAwardsNumber计算'},
     specialAdditionalDeduction: {nec: true, base: true, text: '每月专项附加扣除', unit: '元', info: '详情请见个税APP或工资单流水中'},
     signingBonus: {base: true, nec: true, text: '签字费(可按月)', unit: '元', info: '每个月额外奖金，如果需要分12个月单独填写，请使用空格分开'},
+    stockOption: {
+        text: '期权',
+        nec: true,
+        value: {nec: true, base: true, text: '每年期权价值', unit: '元', info: '年度期权总价值'},
+        separateTax: {nec: true, base: true, text: '期权单独计税', unit: '', info: '是否按20%单独计税，否则计入工资累计计税。输入1为是，0为否'},
+        vesting: {nec: true, base: true, text: '期权月归属比例', unit: '%', info: '12个月归属比例，用空格分隔，总和不超过100'},
+        buybackMonth: {nec: true, base: true, text: '期权回购月份', unit: '月', info: '期权回购月份(1-12)'},
+    },
     insuranceAndFundRate: {
         text: '五险一金个人缴纳部分',
         nec: true,
@@ -73,6 +81,9 @@ export const RESULT_TEXT_MAP: TTransformMap<ICalculateResult> = {
     awardsPreTax: {base: true, text: '年终奖税前金额', info: ''},
     awardsTax: {base: true, text: '年终奖个人所得税金额', info: ''},
     awardsAfterTax: {base: true, text: '年终奖税后金额', info: ''},
+    stockOptionPreTax: {base: true, text: '期权税前金额', info: '期权回购时的税前金额'},
+    stockOptionTax: {base: true, text: '期权税额', info: '期权个人所得税金额'},
+    stockOptionAfterTax: {base: true, text: '期权税后金额', info: '期权回购后的税后金额'},
     insuranceAndFund: {
         text: '五险一金个人缴纳部分',
         pension: {base: true, text: '养老保险个人缴纳金额', info: ''},

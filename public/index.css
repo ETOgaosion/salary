@@ -68,6 +68,13 @@ body {
 .header-item i {
     margin-right: 5px;
 }
+.notice {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    max-width: 300px;
+}
 .salary-item{
     margin-bottom: 5px;
     font-size: 16px;
@@ -126,6 +133,84 @@ body {
 .input-area i{
     font-size: 14px;
     margin-right: 5px;
+}
+
+.calc-btn {
+    margin-top: 20px;
+    padding: 10px 40px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #fff;
+    color: #152a65;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.calc-btn:hover {
+    background-color: #eee;
+}
+
+.array-container {
+    margin-top: 5px;
+    padding-left: 10px;
+}
+.array-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    gap: 5px;
+}
+.array-month {
+    width: 60px;
+    padding: 3px;
+    font-size: 14px;
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #eee;
+    border-radius: 3px;
+}
+.array-month option {
+    background-color: #152a65;
+    color: #fff;
+}
+.array-value {
+    width: 80px;
+    padding: 3px;
+    font-size: 14px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+.array-unit {
+    font-size: 14px;
+    color: #aaa;
+}
+.array-del {
+    cursor: pointer;
+    color: #f66;
+    font-size: 16px;
+    margin-left: 5px;
+}
+.array-del:hover {
+    color: #f00;
+}
+.array-add {
+    display: inline-block;
+    cursor: pointer;
+    color: #fff;
+    background-color: #4a6;
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 18px;
+    margin-top: 5px;
+}
+.array-add:hover {
+    background-color: #5b7;
 }
 
 @media screen and (max-width: 600px){

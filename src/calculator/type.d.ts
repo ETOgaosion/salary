@@ -9,6 +9,13 @@ export interface IHousingFundRange {
     max: number;
 }
 
+export interface IStockOption {
+    value: number; // 每年期权总价值
+    separateTax: boolean; // 期权单独计税 (default: false, 20% flat tax if true)
+    vesting: number[]; // 期权月归属比例 (12 values, sum <= 100)
+    buybackMonth: number; // 回购月份 (1-12)
+}
+
 export interface IInsuranceAndFund {
     pension: number;
     medicalInsurance: number;
@@ -39,6 +46,7 @@ export interface ICalculateData<T = IInsuranceAndFund> {
     insuranceAndFundRateOfCompany: T ;
     signingBonus: number[];
     housingFundRange: IHousingFundRange;
+    stockOption: IStockOption; // 期权配置
 }
 
 export type ICalculateOptions = Partial<ICalculateData<IInsuranceAndFundOptions>>;
@@ -64,6 +72,9 @@ export interface ICalculateResult {
     awardsPreTax: number;
     awardsTax: number;
     awardsAfterTax: number;
+    stockOptionPreTax: number; // 期权税前金额
+    stockOptionTax: number; // 期权税额
+    stockOptionAfterTax: number; // 期权税后金额
 }
 
 export class Salary implements ICalculateData {
@@ -77,6 +88,7 @@ export class Salary implements ICalculateData {
     insuranceAndFundRateOfCompany: IInsuranceAndFund;
     signingBonus: number[]; // 每月额外奖金
     housingFundRange: IHousingFundRange; // 公积金计算上下限
+    stockOption: IStockOption; // 期权配置
 
     salaryResult: ICalculateResult;
 

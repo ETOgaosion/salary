@@ -5,7 +5,7 @@
  */
 
 import {calculateSalary} from './calculator';
-import {ICalculateData, ICalculateResult, IHousingFundRange, IInsuranceAndFund} from './index.d';
+import {ICalculateData, ICalculateResult, IHousingFundRange, IInsuranceAndFund, IStockOption} from './index.d';
 
 export default class Salary implements ICalculateData {
     salary: number = 10000; // 基础工资
@@ -34,6 +34,12 @@ export default class Salary implements ICalculateData {
     };
     signingBonus: number[] = []; // 每月额外奖金
     housingFundRange: IHousingFundRange = {min: 2590, max: 34188}; // 公积金计算上下限
+    stockOption: IStockOption = {
+        value: 0, // 每年期权总价值
+        separateTax: false, // 期权单独计税
+        vesting: [], // 期权月归属比例
+        buybackMonth: 12, // 回购月份
+    };
 
     salaryResult: ICalculateResult;
 
@@ -43,7 +49,7 @@ export default class Salary implements ICalculateData {
             if (typeof options[key] === 'object') {
                 Object.assign(this[key], options[key]);
             } else if (typeof options[key] !== 'undefined') {
-                this[key] = options[key] as any;
+                (this as any)[key] = options[key];
             }
         }
     }

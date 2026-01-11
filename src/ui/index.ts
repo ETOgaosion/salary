@@ -56,6 +56,15 @@ export class UI {
             }
         };
         this.inputArea.appendChild(more);
+
+        // Calculate button
+        const calcBtn = this._ce('button', 'calc-btn');
+        calcBtn.innerText = '计算';
+        calcBtn.onclick = () => {
+            this._calculate();
+            toast('计算结果已更新');
+        };
+        this.inputArea.appendChild(calcBtn);
     }
 
     private _initResultUI () {
@@ -102,39 +111,163 @@ export class UI {
 
         if (isInput) {
             this._checkNec(div, isInput, item.nec);
-            const input = this._ce('input', 'salary-input') as HTMLInputElement;
-    
-            const value = salary[key];
-            input.value = subKey ? value[subKey] : value;
-            if (key !== 'signingBonus')
-                input.type = 'number';
-    
-            input.onchange = () => {
-                const value = input.value;
 
-                let inputValue: number | number[];
-                if (key !== 'signingBonus') {
-                    inputValue = parseFloat(value);
-                } else {
-                    if (value.indexOf(' ') !== -1) {
-                        inputValue = value.split(' ').map(i => parseFloat(i));
+            const value = salary[key];
+            // Fields that accept space-separated arrays
+            const arrayFields = ['signingBonus'];
+            const nestedArrayFields = [{key: 'stockOption', subKey: 'vesting'}];
+            const nestedBooleanFields = [{key: 'stockOption', subKey: 'separateTax'}];
+
+            const isArrayField = arrayFields.includes(key) ||
+                nestedArrayFields.some(f => f.key === key && f.subKey === subKey);
+            const isBooleanField = nestedBooleanFields.some(f => f.key === key && f.subKey === subKey);
+
+            if (isBooleanField) {
+                // Checkbox for boolean fields
+                const input = this._ce('input', 'salary-checkbox') as HTMLInputElement;
+                input.type = 'checkbox';
+                input.checked = subKey ? value[subKey] : value;
+
+                input.onchange = () => {
+                    if (subKey) {
+                        salary[key][subKey] = input.checked;
                     } else {
-                        inputValue = parseFloat(value);
+                        salary[key] = input.checked;
                     }
+                };
+                div.appendChild(input);
+                // Add info icon for boolean fields
+                if (item.info || item.url) {
+                    const info = this._ce('i', 'ei-info-sign');
+                    const infoStr = item.info || '查看详情';
+                    info.title = infoStr;
+                    if (item.url) {
+                        info.onclick = () => {window.open((item.url as string).substring(4));};
+                    } else {
+                        info.onclick = () => {toast(infoStr || '', 5000);};
+                    }
+                    div.appendChild(info);
                 }
-                if (subKey) {
-                    salary[key][subKey] = inputValue;
-                } else {
-                    salary[key] = inputValue;
+            } else if (isArrayField) {
+                // Add info icon after title for array fields
+                if (item.info || item.url) {
+                    const info = this._ce('i', 'ei-info-sign');
+                    const infoStr = item.info || '查看详情';
+                    info.title = infoStr;
+                    if (item.url) {
+                        info.onclick = () => {window.open((item.url as string).substring(4));};
+                    } else {
+                        info.onclick = () => {toast(infoStr || '', 5000);};
+                    }
+                    div.appendChild(info);
                 }
-                this._calculate();
-                toast('计算结果已更新');
-            };
-            div.appendChild(input);
-            if (item.unit) {
-                const span = this._ce('span', 'salary-unit');
-                span.innerText = item.unit;
-                div.appendChild(span);
+                // Expandable table for array fields
+                const container = this._ce('div', 'array-container');
+                const entriesDiv = this._ce('div', 'array-entries');
+                container.appendChild(entriesDiv);
+
+                const currentArray: number[] = subKey ? value[subKey] : value;
+
+                const collectData = () => {
+                    const result: number[] = new Array(12).fill(0);
+                    const rows = entriesDiv.querySelectorAll('.array-row');
+                    rows.forEach((row) => {
+                        const monthSelect = row.querySelector('.array-month') as HTMLSelectElement;
+                        const valueInput = row.querySelector('.array-value') as HTMLInputElement;
+                        const month = parseInt(monthSelect.value) - 1;
+                        const val = parseFloat(valueInput.value) || 0;
+                        if (month >= 0 && month < 12) {
+                            result[month] = val;
+                        }
+                    });
+                    if (subKey) {
+                        salary[key][subKey] = result;
+                    } else {
+                        salary[key] = result;
+                    }
+                };
+
+                const addRow = (month: number = 1, val: number = 0) => {
+                    const row = this._ce('div', 'array-row');
+
+                    const monthSelect = this._ce('select', 'array-month') as HTMLSelectElement;
+                    for (let m = 1; m <= 12; m++) {
+                        const opt = this._ce('option') as HTMLOptionElement;
+                        opt.value = String(m);
+                        opt.innerText = m + '月';
+                        monthSelect.appendChild(opt);
+                    }
+                    monthSelect.value = String(month);
+                    monthSelect.onchange = collectData;
+
+                    const valueInput = this._ce('input', 'array-value') as HTMLInputElement;
+                    valueInput.type = 'number';
+                    valueInput.value = String(val);
+                    valueInput.onchange = collectData;
+
+                    const unit = this._ce('span', 'array-unit');
+                    unit.innerText = item.unit || '';
+
+                    const delBtn = this._ce('span', 'array-del');
+                    delBtn.innerText = '×';
+                    delBtn.onclick = () => {
+                        row.remove();
+                        collectData();
+                    };
+
+                    row.appendChild(monthSelect);
+                    row.appendChild(valueInput);
+                    row.appendChild(unit);
+                    row.appendChild(delBtn);
+                    entriesDiv.appendChild(row);
+                };
+
+                // Initialize with existing data
+                if (Array.isArray(currentArray)) {
+                    currentArray.forEach((val, idx) => {
+                        if (val !== 0) {
+                            addRow(idx + 1, val);
+                        }
+                    });
+                }
+
+                const addBtn = this._ce('span', 'array-add');
+                addBtn.innerText = '+';
+                addBtn.onclick = () => addRow();
+                container.appendChild(addBtn);
+
+                div.appendChild(container);
+            } else {
+                const input = this._ce('input', 'salary-input') as HTMLInputElement;
+                input.value = subKey ? value[subKey] : value;
+                input.type = 'number';
+
+                input.onchange = () => {
+                    const inputValue = parseFloat(input.value);
+                    if (subKey) {
+                        salary[key][subKey] = inputValue;
+                    } else {
+                        salary[key] = inputValue;
+                    }
+                };
+                div.appendChild(input);
+                if (item.unit) {
+                    const span = this._ce('span', 'salary-unit');
+                    span.innerText = item.unit;
+                    div.appendChild(span);
+                }
+                // Add info icon for number fields
+                if (item.info || item.url) {
+                    const info = this._ce('i', 'ei-info-sign');
+                    const infoStr = item.info || '查看详情';
+                    info.title = infoStr;
+                    if (item.url) {
+                        info.onclick = () => {window.open((item.url as string).substring(4));};
+                    } else {
+                        info.onclick = () => {toast(infoStr || '', 5000);};
+                    }
+                    div.appendChild(info);
+                }
             }
         } else {
             const result = this._ce('span', 'salary-result') as HTMLInputElement;
@@ -154,18 +287,19 @@ export class UI {
                 result.innerText = value;
             });
             div.appendChild(result);
-        }
 
-        if (item.info || item.url) {
-            const info = this._ce('i', 'ei-info-sign');
-            const infoStr = item.info || '查看详情';
-            info.title = infoStr;
-            if (item.url) {
-                info.onclick = () => {window.open((item.url as string).substring(4));};
-            } else {
-                info.onclick = () => {toast(infoStr || '', 5000);};
+            // Add info icon for non-input items
+            if (item.info || item.url) {
+                const info = this._ce('i', 'ei-info-sign');
+                const infoStr = item.info || '查看详情';
+                info.title = infoStr;
+                if (item.url) {
+                    info.onclick = () => {window.open((item.url as string).substring(4));};
+                } else {
+                    info.onclick = () => {toast(infoStr || '', 5000);};
+                }
+                div.appendChild(info);
             }
-            div.appendChild(info);
         }
 
         return div;
